@@ -1735,6 +1735,15 @@ cdef class PyTessBaseAPI:
             self._destroy_pix()
             self._baseapi.SetImage(cimagedata, width, height, bytes_per_pixel, bytes_per_line)
 
+        def SetCVImage(self, image):
+            """Set image from cv2 image/numpy array
+            """
+            bytes_per_pixel = image.shape[2] if len(image.shape) == 3 else 1
+            height, width   = image.shape[:2]
+            bytes_per_line  = bytes_per_pixel * width
+            self.SetImageBytes(image.tobytes(), width, height,
+                           bytes_per_pixel, bytes_per_line)
+
     def SetImageBytesBmp(self, imagedata):
         """Provide an image for Tesseract to recognize.
 
